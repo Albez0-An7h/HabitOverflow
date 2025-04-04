@@ -36,7 +36,7 @@ const SignUp = () => {
         setLoading(true);
 
         try {
-            const { data, error } = await signUpWithEmail(email, password);
+            const { error } = await signUpWithEmail(email, password);
 
             if (error) {
                 throw error;

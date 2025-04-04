@@ -23,7 +23,7 @@ const SignIn = () => {
         setLoading(true);
 
         try {
-            const { data, error } = await signInWithEmail(email, password);
+            const { error } = await signInWithEmail(email, password);
 
             if (error) {
                 throw error;

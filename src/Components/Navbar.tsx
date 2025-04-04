@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../Utils/SupabaseClient';
 import { useNavigate } from 'react-router-dom';
+import { User } from '@supabase/supabase-js';
 
 const Navbar: React.FC = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState<User | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -19,7 +20,7 @@ const Navbar: React.FC = () => {
         
         // Listen for auth state changes
         const { data: authListener } = supabase.auth.onAuthStateChange(
-            (event, session) => {
+            (_event, session) => {
                 setUser(session?.user || null);
             }
         );

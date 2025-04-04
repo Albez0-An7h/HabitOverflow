@@ -239,9 +239,9 @@ const HabitManager: React.FC = () => {
             const file = e.target.files[0];
             const reader = new FileReader();
             
-            reader.onload = (event) => {
-                if (event.target && typeof event.target.result === 'string') {
-                    setVerificationImage(event.target.result);
+            reader.onload = () => {
+                if (reader.result && typeof reader.result === 'string') {
+                    setVerificationImage(reader.result);
                 }
             };
             
