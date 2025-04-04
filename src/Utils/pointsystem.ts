@@ -29,12 +29,12 @@ export interface HabitVerificationStatus {
 }
 
 // Award points for completing a habit
-export const awardHabitCompletionPoints = async (userId: string, _habitId?: string): Promise<number> => {
+export const awardHabitCompletionPoints = async (userId: string): Promise<number> => {
     return await addPointsToUser(userId, POINTS.HABIT_COMPLETION);
 };
 
 // Award points for completing a full stack
-export const awardStackCompletionPoints = async (userId: string, _stackId?: string): Promise<number> => {
+export const awardStackCompletionPoints = async (userId: string): Promise<number> => {
     return await addPointsToUser(userId, POINTS.STACK_COMPLETION);
 };
 
@@ -246,7 +246,7 @@ export const updateUserStreak = async (userId: string): Promise<number> => {
 const addPointsToUser = async (userId: string, points: number): Promise<number> => {
     try {
         // First, check if the user has a points record
-        const { data, error } = await supabase
+        const { data: existingData, error } = await supabase
             .from('user_points')
             .select('total_points')
             .eq('user_id', userId)
@@ -257,7 +257,7 @@ const addPointsToUser = async (userId: string, points: number): Promise<number> 
             return 0;
         }
         
-        if (!data) {
+        if (!existingData) {
             // Create new points record for the user
             const { error: insertError } = await supabase
                 .from('user_points')
@@ -276,7 +276,7 @@ const addPointsToUser = async (userId: string, points: number): Promise<number> 
             return points;
         } else {
             // Update existing record
-            const newTotal = data.total_points + points;
+            const newTotal = existingData.total_points + points;
             const { error: updateError } = await supabase
                 .from('user_points')
                 .update({ total_points: newTotal })

@@ -26,7 +26,6 @@ type Timeframe = 'day' | 'week' | 'month';
 
 const Reports = () => {
     const navigate = useNavigate();
-    const [userId, setUserId] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [selectedTimeframe, setSelectedTimeframe] = useState<Timeframe>('day');
@@ -72,8 +71,6 @@ const Reports = () => {
                     navigate('/signin');
                     return;
                 }
-                
-                setUserId(user.id);
                 
                 // Fetch points data
                 const pointsData = await getUserPointsData(user.id);
@@ -136,7 +133,8 @@ const Reports = () => {
                     .in('stack_id', 
                         supabase.from('habit_stacks')
                         .select('id')
-                        .eq('user_id', userId)));
+                        .eq('user_id', userId)
+                        .then(res => res.data?.map(stack => stack.id) || [])));
                 
             if (completedError) throw completedError;
             
@@ -147,7 +145,8 @@ const Reports = () => {
                 .in('stack_id', 
                     supabase.from('habit_stacks')
                     .select('id')
-                    .eq('user_id', userId));
+                    .eq('user_id', userId)
+                    .then(res => res.data?.map(stack => stack.id) || []));
                 
             if (habitsError) throw habitsError;
             
@@ -234,7 +233,8 @@ const Reports = () => {
                 .in('stack_id', 
                     supabase.from('habit_stacks')
                     .select('id')
-                    .eq('user_id', userId));
+                    .eq('user_id', userId)
+                    .then(res => res.data?.map(stack => stack.id) || []));
                 
             if (habitsError) throw habitsError;
             

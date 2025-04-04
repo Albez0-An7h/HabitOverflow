@@ -370,7 +370,7 @@ const HabitManager: React.FC = () => {
                 }
             }
             
-            // Update the UI
+            // Update the UI with properly typed habits
             setHabitStacks(habitStacks.map(s => {
                 if (s.id === stackId) {
                     return {
@@ -379,7 +379,7 @@ const HabitManager: React.FC = () => {
                             ...h, 
                             completed: false,
                             verification: {
-                                ...h.verification,
+                                habitId: h.id,
                                 isVerified: false,
                                 pendingVerification: false
                             }

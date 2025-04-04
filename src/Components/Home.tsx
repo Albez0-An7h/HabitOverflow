@@ -88,7 +88,8 @@ const Home = () => {
                 .in('stack_id', 
                     supabase.from('habit_stacks')
                     .select('id')
-                    .eq('user_id', userId));
+                    .eq('user_id', userId)
+                    .then(res => res.data?.map(stack => stack.id) || []));
                 
             if (habitsError) throw habitsError;
             
@@ -100,7 +101,8 @@ const Home = () => {
                 .in('stack_id', 
                     supabase.from('habit_stacks')
                     .select('id')
-                    .eq('user_id', userId));
+                    .eq('user_id', userId)
+                    .then(res => res.data?.map(stack => stack.id) || []));
                 
             if (completedError) throw completedError;
             
