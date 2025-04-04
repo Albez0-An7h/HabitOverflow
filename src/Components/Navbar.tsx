@@ -6,6 +6,7 @@ import { User } from '@supabase/supabase-js';
 
 const Navbar: React.FC = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    // Fix the initial state type to match the User type
     const [user, setUser] = useState<User | null>(null);
     const navigate = useNavigate();
 

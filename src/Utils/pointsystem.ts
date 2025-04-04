@@ -41,7 +41,7 @@ export const awardStackCompletionPoints = async (userId: string): Promise<number
 // Get the verification status for a habit
 export const getHabitVerificationStatus = async (habitId: string): Promise<HabitVerificationStatus | null> => {
     try {
-        const { data, error } = await supabase
+        const { data: verificationData, error } = await supabase
             .from('habit_verifications')
             .select('*')
             .eq('habit_id', habitId)
@@ -52,7 +52,7 @@ export const getHabitVerificationStatus = async (habitId: string): Promise<Habit
             return null;
         }
         
-        if (!data) {
+        if (!verificationData) {
             // Create a default verification status if none exists
             return {
                 habitId,
@@ -62,11 +62,11 @@ export const getHabitVerificationStatus = async (habitId: string): Promise<Habit
         }
         
         return {
-            habitId: data.habit_id,
-            isVerified: data.is_verified,
-            pendingVerification: data.pending_verification,
-            imageUrl: data.image_url,
-            verifiedAt: data.verified_at
+            habitId: verificationData.habit_id,
+            isVerified: verificationData.is_verified,
+            pendingVerification: verificationData.pending_verification,
+            imageUrl: verificationData.image_url,
+            verifiedAt: verificationData.verified_at
         };
     } catch (error) {
         console.error('Error getting habit verification status:', error);

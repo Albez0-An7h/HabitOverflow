@@ -81,15 +81,20 @@ const Home = () => {
             // Get points and streak data
             const pointsData = await getUserPointsData(userId);
             
+            // Get habit stacks first
+            const { data: stacks, error: stacksError } = await supabase
+                .from('habit_stacks')
+                .select('id')
+                .eq('user_id', userId);
+                
+            if (stacksError) throw stacksError;
+            const stackIds = stacks?.map(stack => stack.id) || [];
+            
             // Count total habits
             const { data: habitsData, error: habitsError } = await supabase
                 .from('habits')
                 .select('id', { count: 'exact' })
-                .in('stack_id', 
-                    supabase.from('habit_stacks')
-                    .select('id')
-                    .eq('user_id', userId)
-                    .then(res => res.data?.map(stack => stack.id) || []));
+                .in('stack_id', stackIds);
                 
             if (habitsError) throw habitsError;
             
@@ -98,11 +103,7 @@ const Home = () => {
                 .from('habits')
                 .select('id', { count: 'exact' })
                 .eq('completed', true)
-                .in('stack_id', 
-                    supabase.from('habit_stacks')
-                    .select('id')
-                    .eq('user_id', userId)
-                    .then(res => res.data?.map(stack => stack.id) || []));
+                .in('stack_id', stackIds);
                 
             if (completedError) throw completedError;
             

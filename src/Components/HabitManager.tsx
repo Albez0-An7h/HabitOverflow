@@ -262,7 +262,7 @@ const HabitManager: React.FC = () => {
         try {
             // Upload the image to Supabase storage
             const imageName = `verification_${selectedHabitForVerification.id}_${Date.now()}.jpg`;
-            const { data: uploadData, error: uploadError } = await supabase.storage
+            const { error: uploadError } = await supabase.storage
                 .from('habit_verifications')
                 .upload(imageName, verificationImage);
                 
@@ -379,7 +379,7 @@ const HabitManager: React.FC = () => {
                             ...h, 
                             completed: false,
                             verification: {
-                                habitId: h.id,
+                                habitId: h.id, // Ensure habitId is never undefined
                                 isVerified: false,
                                 pendingVerification: false
                             }
