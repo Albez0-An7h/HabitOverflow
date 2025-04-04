@@ -29,7 +29,7 @@ export interface HabitVerificationStatus {
 }
 
 // Award points for completing a habit
-export const awardHabitCompletionPoints = async (userId: string): Promise<number> => {
+export const awardHabitCompletionPoints = async (userId: string, habitId?: string): Promise<number> => {
     return await addPointsToUser(userId, POINTS.HABIT_COMPLETION);
 };
 
