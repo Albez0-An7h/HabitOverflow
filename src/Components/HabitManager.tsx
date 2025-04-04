@@ -113,7 +113,7 @@ const HabitManager: React.FC = () => {
                         description: habit.description,
                         completed: habit.completed,
                         position: habit.position,
-                        verification: verificationStatus || undefined
+                        verification: verificationStatus ?? undefined  // Use nullish coalescing to convert null to undefined
                     });
                 }
                 
