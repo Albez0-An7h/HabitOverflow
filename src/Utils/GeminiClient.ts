@@ -24,7 +24,7 @@ export async function verifyHabitWithImage(
 ): Promise<VerificationResult> {
   try {
     // Get the generative model
-    const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
     
     // Prepare the prompt
     const prompt = `Verify if this image shows evidence of completing the habit: "${habitName}". 

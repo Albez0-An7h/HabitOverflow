@@ -321,7 +321,7 @@ const HabitManager: React.FC = () => {
                         
                     if (allOtherHabitsCompleted) {
                         // Award bonus points for completing the entire stack
-                        const stackPoints = await awardStackCompletionPoints(userId, selectedStackForVerification);
+                        const stackPoints = await awardStackCompletionPoints(userId);
                         setUserPoints(stackPoints);
                     }
                 }

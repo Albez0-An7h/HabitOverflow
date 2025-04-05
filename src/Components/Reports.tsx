@@ -22,6 +22,13 @@ interface TimeframeStats {
     streakMaintained: boolean;
 }
 
+interface UserStats {
+    habitCount: number;
+    streak: number;
+    completionRate: number;
+    goalsAchieved: number;
+}
+
 type Timeframe = 'day' | 'week' | 'month';
 
 const Reports = () => {
@@ -29,6 +36,12 @@ const Reports = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [selectedTimeframe, setSelectedTimeframe] = useState<Timeframe>('day');
+    const [userStats, setUserStats] = useState<UserStats>({
+        habitCount: 0,
+        streak: 0,
+        completionRate: 0,
+        goalsAchieved: 0
+    });
     
     // Stats for different timeframes
     const [dayStats, setDayStats] = useState<TimeframeStats>({
@@ -121,38 +134,37 @@ const Reports = () => {
             // Format date for Supabase query
             const formattedStartDate = startDate.toISOString();
             
+            // First, get the stack IDs for this user
+            const { data: stacks, error: stacksError } = await supabase
+                .from('habit_stacks')
+                .select('id')
+                .eq('user_id', userId);
+                
+            if (stacksError) throw stacksError;
+            const stackIds = stacks?.map(stack => stack.id) || [];
+            
+            // Then get habit IDs for these stacks
+            const { data: habits, error: habitsError } = await supabase
+                .from('habits')
+                .select('id')
+                .in('stack_id', stackIds);
+                
+            if (habitsError) throw habitsError;
+            const habitIds = habits?.map(habit => habit.id) || [];
+            
             // Get all habits completed within the timeframe
             const { data: completedData, error: completedError } = await supabase
                 .from('habit_verifications')
                 .select('habit_id, verified_at')
                 .eq('is_verified', true)
                 .gt('verified_at', formattedStartDate)
-                .in('habit_id', 
-                    supabase.from('habits')
-                    .select('id')
-                    .in('stack_id', 
-                        supabase.from('habit_stacks')
-                        .select('id')
-                        .eq('user_id', userId)
-                        .then(res => res.data?.map(stack => stack.id) || [])));
+                .in('habit_id', habitIds);
                 
             if (completedError) throw completedError;
             
-            // Get all habits for this user
-            const { data: habitsData, error: habitsError } = await supabase
-                .from('habits')
-                .select('id')
-                .in('stack_id', 
-                    supabase.from('habit_stacks')
-                    .select('id')
-                    .eq('user_id', userId)
-                    .then(res => res.data?.map(stack => stack.id) || []));
-                
-            if (habitsError) throw habitsError;
-            
             // Calculate stats
             const habitsCompleted = completedData?.length || 0;
-            const totalHabits = habitsData?.length || 0;
+            const totalHabits = habitIds.length;
             const completionRate = totalHabits > 0 ? (habitsCompleted / totalHabits) * 100 : 0;
             
             // Calculate points earned in this timeframe (rough estimate - 5 points per habit)
