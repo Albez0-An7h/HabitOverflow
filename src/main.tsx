@@ -8,9 +8,11 @@ import SignIn from './Components/SignIn.tsx'
 import SignUp from './Components/SignUp.tsx'
 import Home from './Components/Home.tsx'
 import ProfileCreation from './Components/ProfileCreation.tsx'
+import EditProfile from './Components/EditProfile.tsx'
 import HabitManager from './Components/HabitManager.tsx'
 import Reports from './Components/Reports.tsx'
 import Layout from './Components/Layout.tsx'
+import Leaderboard from './Components/Leaderboard.tsx'
 
 const router = createBrowserRouter([
   {
@@ -33,6 +35,14 @@ const router = createBrowserRouter([
       {
         path: '/profile',
         element: <ProfileCreation/>
+      },
+      {
+        path: '/edit-profile',
+        element: <EditProfile/>
+      },
+      {
+        path: '/leaderboard',
+        element: <Leaderboard/>
       }
     ]
   },

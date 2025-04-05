@@ -133,7 +133,7 @@ const Home = () => {
 
     // Updated handler functions for buttons to use existing routes
     const handleEditProfile = () => {
-        navigate('/profile');
+        navigate('/edit-profile');
     };
     
     const handleTrackNewHabit = () => {

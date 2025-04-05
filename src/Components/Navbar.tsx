@@ -71,6 +71,9 @@ const Navbar: React.FC = () => {
                     <Link to="/reports" className="text-gray-300 hover:text-white transition-colors">
                         Reports
                     </Link>
+                    <Link to="/leaderboard" className="text-gray-300 hover:text-white transition-colors">
+                        Leaderboard
+                    </Link>
                 </div>
 
                 {/* Auth buttons - Desktop */}
@@ -118,6 +121,13 @@ const Navbar: React.FC = () => {
                         onClick={() => setIsMenuOpen(false)}
                     >
                         Reports
+                    </Link>
+                    <Link 
+                        to="/leaderboard" 
+                        className="block py-2 px-3 text-gray-300 hover:bg-slate-700 hover:text-white rounded-md"
+                        onClick={() => setIsMenuOpen(false)}
+                    >
+                        Leaderboard
                     </Link>
                     {/* Mobile auth buttons */}
                     {user ? (
